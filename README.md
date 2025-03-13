@@ -38,6 +38,18 @@ HHA is a Django-based web application designed to manage events, demographics, a
   pip install -r requirements.txt
   ```
 
+6. Create a `.env` file in the project root directory and add the following environment variables:
+  ```properties
+  SECRET_KEY=your_secret_key
+  DEBUG=True
+  ALLOWED_HOSTS=localhost,127.0.0.1
+  EMAIL_HOST=smtp.gmail.com
+  EMAIL_PORT=465
+  EMAIL_HOST_USER=your_email@example.com
+  EMAIL_HOST_PASSWORD=your_email_password
+  EMAIL_USE_TLS=True
+  ```
+
 ## Usage
 
 1. Apply the migrations:
@@ -48,11 +60,15 @@ HHA is a Django-based web application designed to manage events, demographics, a
   ```bash
   python manage.py createsuperuser
   ```
-3. Run the development server:
+3. Collect static files:
+  ```bash
+  python manage.py collectstatic
+  ```
+4. Run the development server:
   ```bash
   python manage.py runserver
   ```
-4. Open your web browser and go to `http://127.0.0.1:8000/` to access the application.
+5. Open your web browser and go to `http://127.0.0.1:8000/` to access the application.
 
 ## Contributing
 1. Fork the repository.
@@ -72,7 +88,6 @@ HHA is a Django-based web application designed to manage events, demographics, a
 
 ## License
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more details.
-
 
 ## Contact
 For any inquiries or feedback, please contact https://www.linkedin.com/in/iamgeekspe/.
