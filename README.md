@@ -1,7 +1,7 @@
 # Project Name: HHA
 
 ## Description
-HHA is a Django-based web application designed to manage events, demographics, and ministries for an organization. This project aims to streamline event management, user registration, and provide a comprehensive platform for organizational activities.
+HHA is a Django-based web application designed to manage events, demographics, and ministries for a Church body. This project aims to streamline event management, user registration, and provide a comprehensive platform for organizational activities.
 
 ## Features
 - **Event Management**: Create, update, and manage events with detailed descriptions, speakers, and hashtags.
@@ -58,7 +58,7 @@ HHA is a Django-based web application designed to manage events, demographics, a
 1. Fork the repository.
 2. Create a new branch:
   ```bash
-  git checkout -b feature-branch
+  git checkout -b `feature-branch`
   ```
 3. Make your changes and commit them:
   ```bash
@@ -66,17 +66,13 @@ HHA is a Django-based web application designed to manage events, demographics, a
   ```
 4. Push to the branch:
   ```bash
-  git push origin feature-branch
+  git push origin `feature-branch`
   ```
 5. Open a pull request.
 
 ## License
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more details.
 
-## Acknowledgements
-- Django
-- QR Code library
-- Contributors to the project
 
 ## Contact
-For any inquiries or feedback, please contact [your email address].
+For any inquiries or feedback, please contact https://www.linkedin.com/in/iamgeekspe/.
