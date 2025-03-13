@@ -1,0 +1,190 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}
+<title>American Baptist Church</title>
+{% endblock %}
+{% block content %}
+<section class="s-hero" data-parallax="scroll" data-image-src="{% static 'images/hero-bg-3000.jpg' %}" data-natural-width=3000 data-natural-height=2000 data-position-y=center>
+    <div class="hero-left-bar"></div>
+    <div class="row hero-content">
+        <div class="column large-full hero-content__text">
+            <h1>
+                We Exist To <br>
+                Honor God And <br>
+                Make Disciples
+            </h1>
+            <div class="hero-content__buttons">
+                <a href="{% url 'events:home' %}" class="btn btn--stroke">Upcoming Events</a>
+                <a href="{% url 'core:about' %}" class="btn btn--stroke">Learn More About Us</a>
+            </div>
+        </div>
+    </div>
+    <ul class="hero-social">
+        <li class="hero-social__title">Connect with Us</li>
+        <li>
+            <a href="#0" title="Facebook">Facebook</a>
+        </li>
+        <li>
+            <a href="#0" title="YouTube">YouTube</a>
+        </li>
+        <li>
+            <a href="#0" title="Instagram">Instagram</a>
+        </li>
+    </ul>
+    <div class="hero-scroll">
+        <a href="#about" class="scroll-link smoothscroll">
+            Scroll For More
+        </a>
+    </div>
+</section>
+<section id="about" class="s-about">
+    <div class="row row-y-center about-content">
+        <div class="column large-{%if events1 %}half{% else %}full{% endif %} medium-full">
+            <h3 class="subhead">Welcome to American Baptist Church</h3>
+            <p class="lead">
+                Welcome to American Baptist Church, where we come together to worship, learn,
+                and grow in our faith. Our vibrant community is committed to spreading love,
+                compassion, and the teachings of Christ.
+            </p>
+            <a href="{% url 'core:about' %}" class="btn btn--primary btn--about">Learn More About Us</a>
+        </div>
+        {% if events1 %}
+        <div class="column large-half medium-full">
+            <ul class="about-sched">
+                {% for event in events1 %}
+                <li>
+                    <h4>{{ event.event.name|title }}</h4>
+                    <p>
+                        {{ event.date|date:"l, F j" }} &mdash;
+                        {{ event.event.start_time|time:"g:iA" }}{% if event.event.end_time %} - {{ event.event.end_time|time:"g:iA" }}{% endif %}<br>
+                        {{ event.event.location }}
+                    </p>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+    </div>
+</section>
+<section class="s-connect">
+    <div class="row connect-content">
+        <div class="column large-half tab-full">
+            <h3 class="display-1">Serve with Purpose.</h3>
+            <p>
+                Are you looking to make a meaningful impact? Join us as we work together to serve God and spread positivity. We believe that every effort counts and contributes to a brighter future. Let's join hands and make a difference!
+            </p>
+            <a href="{% url 'ministries:home' %}" class="btn btn--primary h-full-width">Get Involved</a>
+        </div>
+        <div class="column large-half tab-full">
+            <h3 class="display-1">Connect and Grow.</h3>
+            <p>
+                Looking for a supportive community to grow and learn with? Our Connect Groups offer a space for genuine connections, discussions, and personal growth. Join us in exploring new ideas, sharing experiences, and building strong relationships.
+            </p>
+            <a href="{% url 'demographic:home' %}" class="btn btn--primary h-full-width">Join a Group</a>
+        </div>
+        {% if quote %}
+        <div class="column large-{% if passage %}half{% else %}full{% endif %}" style="padding-top: 2.4vw">
+            <h2 class="subhead">Word</h2>
+            <aside class="pull-quote">
+                <blockquote>
+                    <p>
+                        {{ quote.quote }}
+                    </p>
+                    <cite>{{ quote.speaker|title }}</cite>
+                </blockquote>
+            </aside>
+        </div>
+        {% endif %}
+        {% if passage %}
+        <div class="column large-{% if quote %}half{% else %}full{% endif %}" style="padding-top: 2.4vw">
+            <h2 class="subhead">Verse of the Day</h2>
+            <blockquote cite="https://www.biblegateway.com/passage/?search={{ reference }}&version={{ version }}">
+                <p>
+                    {{ passage }}
+                </p>
+                <cite>
+                    <a href="https://www.biblegateway.com/passage/?search={{ reference }}&version={{ version }}">{{ reference|upper }} {{ version|upper }}</a>
+                </cite>
+            </blockquote>
+        </div>
+        {% endif %}
+    </div>
+</section>
+{% if events2 %}
+<section class="s-events">
+    <div class="row events-header">
+        <div class="column">
+            <h2 class="subhead">Explore Upcoming Events</h2>
+        </div>
+    </div>
+    <div class="row block-large-1-2 block-900-full events-list">
+        {% for event in events2 %}
+        <div class="column events-list__item">
+            <h3 class="display-1 events-list__item-title">
+                <a href="{% url 'events:single' slug=event.event.slug date=event.date %}" title="{{ event.event.name }}">{{ event.event.name }}{% if event.event.is_special %}&nbsp;
+                        <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 0 512 512">
+                            <path fill="#f9be19" d="M208 512a24.84 24.84 0 0 1-23.34-16l-39.84-103.6a16.06 16.06 0 0 0-9.19-9.19L32 343.34a25 25 0 0 1 0-46.68l103.6-39.84a16.06 16.06 0 0 0 9.19-9.19L184.66 144a25 25 0 0 1 46.68 0l39.84 103.6a16.06 16.06 0 0 0 9.19 9.19l103 39.63a25.49 25.49 0 0 1 16.63 24.1a24.82 24.82 0 0 1-16 22.82l-103.6 39.84a16.06 16.06 0 0 0-9.19 9.19L231.34 496A24.84 24.84 0 0 1 208 512Zm66.85-254.84ZM88 176a14.67 14.67 0 0 1-13.69-9.4l-16.86-43.84a7.28 7.28 0 0 0-4.21-4.21L9.4 101.69a14.67 14.67 0 0 1 0-27.38l43.84-16.86a7.31 7.31 0 0 0 4.21-4.21L74.16 9.79A15 15 0 0 1 86.23.11a14.67 14.67 0 0 1 15.46 9.29l16.86 43.84a7.31 7.31 0 0 0 4.21 4.21l43.84 16.86a14.67 14.67 0 0 1 0 27.38l-43.84 16.86a7.28 7.28 0 0 0-4.21 4.21l-16.86 43.84A14.67 14.67 0 0 1 88 176Zm312 80a16 16 0 0 1-14.93-10.26l-22.84-59.37a8 8 0 0 0-4.6-4.6l-59.37-22.84a16 16 0 0 1 0-29.86l59.37-22.84a8 8 0 0 0 4.6-4.6l22.67-58.95a16.45 16.45 0 0 1 13.17-10.57a16 16 0 0 1 16.86 10.15l22.84 59.37a8 8 0 0 0 4.6 4.6l59.37 22.84a16 16 0 0 1 0 29.86l-59.37 22.84a8 8 0 0 0-4.6 4.6l-22.84 59.37A16 16 0 0 1 400 256Z"/>
+                        </svg>
+                    {% endif %}
+                </a>
+            </h3>
+            <p>
+                {% if event.event.description %}
+                    {{ event.event.description|truncatechars:250 }}
+                {% else %}
+                    No description available.
+                {% endif %}
+            </p>
+            <ul class="events-list__meta">
+                <li class="events-list__meta-date">
+                    {{ event.date|date:"l, F j, Y" }}
+                </li>
+                <li class="events-list__meta-time">
+                    {{ event.event.start_time|time:"g:iA" }} -
+                    {{ event.event.end_time|time:"g:iA" }}
+                </li>
+                <li class="events-list__meta-location">
+                    {{ event.event.location }}
+                </li>
+                {% if event.event.is_special %}
+                    <li class="events-list__meta-quote">Anticipate</li>
+                {% endif %}
+            </ul>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+{% endif %}
+<section class="s-series">
+    <div class="series-img" style="background-image: url('static/images/series-2000.jpg');"></div>
+    <div class="row row-y-center series-content">
+        <div class="column large-half medium-full">
+            <h3 class="subhead">Current Series</h3>
+            <h2>Explore Life's Transformation through Inspiring Messages.</h2>
+            <p>
+                Dive into a transformative journey as we explore the profound messages that shape
+                and enrich our lives. Discover the power of positive influence and the art of
+                personal growth through engaging talks that resonate with your aspirations.
+                Join us in uncovering the wisdom that leads to a fulfilling and purpose-driven life.
+            </p>
+        </div>
+        <div class="column large-half medium-full">
+            <div class="series-content__buttons">
+                <a href="#" class="btn btn--large h-full-width">Watch the Video</a>
+                <a href="#" class="btn btn--large h-full-width">Listen To the Message</a>
+            </div>
+            <div class="series-content__subscribe">
+                <p>
+                    Never miss a message. Stay connected by subscribing to our YouTube and Podcast channels.
+                </p>
+                <ul class="series-content__subscribe-links">
+                    <li class="ss-apple-podcast"><a href="#0">Apple Podcasts</a></li>
+                    <li class="ss-spotify"><a href="#0">Spotify</a></li>
+                    <li class="ss-soundcloud"><a href="#0">SoundCloud</a></li>
+                    <li class="ss-youtube"><a href="#0">YouTube</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+<title>American Baptist Church - Confirm Worker</title>
+{% endblock %}
+
+{% block content %}
+<section class="s-hero" data-parallax="scroll" data-image-src="{% static 'images/hero-bg-3000.jpg' %}" data-natural-width=3000 data-natural-height=2000 data-position-y=center>
+    <div class="hero-left-bar"></div>
+    <div class="row hero-content">
+        <div class="column large-full hero-content__text">
+            <h1>Connect Group</h1>
+            <p style="color: wheat;">Name: {{ name }}</p>
+            <p style="color: wheat;">Phone Number: {{ phone_number }}</p>
+            <p style="color: wheat;">Demographic: {{ demographic }}</p>
+            {% if comment %}
+            <p style="color: wheat;">Comment & Question: {{ comment }}</p>
+            {% endif %}
+            <p style="color: wheat;">{{ name }} wants to connect to the {{ demographic }} group.</p>
+            <p style="color: wheat;">Thank you,<br>HHA Team</p>
+        </div>
+    </div>
+</section>
+{% endblock %}

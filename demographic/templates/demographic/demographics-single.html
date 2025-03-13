@@ -1,0 +1,107 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}
+<title>American Baptist Church - {{ demographic_leader.demographic.name }}</title>
+{% endblock %}
+{% block content %}
+<section class="page-header page-header--{{ demographic_leader.demographic.name | slugify }}">
+    <div class="gradient-overlay"></div>
+    <div class="row page-header__content">
+        <div class="column">
+            <h1>{{ demographic_leader.demographic.name }}</h1>
+        </div>
+    </div>
+</section>
+<section class="page-content">
+    <div class="row">
+        <div class="column">
+            <p class="lead drop-cap">
+                Our church community values and celebrates the diversity of its members. The {{ demographic_leader.demographic.name }} includes individuals who share a common interest, background, or experience within our church family.
+            </p>
+        </div>
+    </div>
+    <div class="row" style="gap: 180px;">
+        <div class="column large-6 tab-full">
+            <p>
+                {{ demographic_leader.demographic.description }}
+            </p>
+            <p>
+                As part of our commitment to fostering a strong sense of belonging and connection, we organize special events, programs, and gatherings specifically tailored to the {{ demographic_leader.demographic.name }}. These initiatives provide opportunities for members of this demographic to come together, share their experiences, and support one another in their faith journey.
+            </p>
+        </div>
+        <div class="column large-4 tab-full">
+            <h6>{{ demographic_leader.demographic.name }} Leader</h6>
+            <p>
+                <img width="120" height="120" class="h-pull-left" alt="{{ demographic_leader.leader.worker.name }}" src="{{ demographic_leader.leader.image.url }}">{{demographic_leader.leader.worker.name }}
+            </p>
+        </div>
+    </div>
+    <div class="row">
+        {% if events %}
+        <h6>Upcoming Events</h6>
+        <div class="row wide block-large-1-2 block-900-full events-list">
+            {% for event in events %}
+            <div class="column events-list__item">
+                <h3 class="display-1 events-list__item-title">
+                    <a href="{% url 'events:single' slug=event.event.slug date=event.date %}" title="{{ event.event.name }}">{{ event.event.name }}</a>
+                </h3>
+                <p>
+                    {{ event.event.description|truncatechars:250 }}
+                </p>
+                <ul class="events-list__meta">
+                    <li class="events-list__meta-date">{{ event.date|date:"l, F j, Y" }}</li>
+                    <li class="events-list__meta-time">{{ event.start_time|time:"g:iA" }}{% if event.end_time %} - {{ event.end_time|time:"g:iA" }} {% endif %}</li>
+                    <li class="events-list__meta-location">{{ event.event.location }}</li>
+                </ul>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+    <div class="row">
+        <div class="column">
+            <h2>Join a Connect Group.</h2>
+            <p>
+                Kindly fill-up the form below to help us better understand your profile and help you connect to a connect group that suits you.
+            </p>
+            {% if form.errors %}
+            <div class="alert-box alert-box--error hideit" id="error">
+                <p><strong>Error!</strong> Please fix the following errors:</p>
+                <ul>
+                    {% for error in form.errors.values %}
+                    {{ error }}
+                    {% endfor %}
+                </ul>
+                <i class="fa fa-times alert-box__close" aria-hidden="true"></i>
+            </div>
+            {% endif %}
+            <form name="connectForm" id="connectForm" class="connectForm" method="post" action="" autocomplete="off">
+                {% csrf_token %}
+                <fieldset>
+                    <div class="form-field">
+                        {{ form.name }}
+                    </div>
+                    <div class="form-field">
+                        {{ form.phone_number }}
+                    </div>
+                    <div class="form-field">
+                        {{ form.email }}
+                    </div>
+                    <br>
+                    <div class="form-field">
+                        <label for="{{ form.demographic.id_for_label }}" class="custom-label-class">Connect to</label>
+                        <div class="ss-custom-select">
+                            {{ form.demographic }}
+                        </div>
+                    </div>
+                    <div class="comments form-field">
+                        {{ form.comment }}
+                    </div>
+                    <br>
+                    <input name="submit" id="submit" class="btn btn--primary btn--large h-full-width" value="Get Connected" type="submit">
+                </fieldset>
+            </form>
+        </div>
+    </div>
+</section>
+{% endblock %}

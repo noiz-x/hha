@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}
+<title>American Baptist Church - Departments</title>
+{% endblock %}
+{% block content %}
+<section class="page-header page-header--volunteer">
+    <div class="gradient-overlay"></div>
+    <div class="row page-header__content">
+        <div class="column">
+            <h1>Join the Team</h1>
+        </div>
+    </div>
+</section>
+<section class="page-content">
+    <div class="row">
+        <div class="column">
+            <p class="lead drop-cap">
+                We invite you to become an essential part of our dedicated team of workers who contribute to making a positive impact in our church community. Your service plays a crucial role in helping us create meaningful experiences for everyone who walks through our doors.
+            </p>
+            <p>
+                As a worker, you'll have the opportunity to connect with others, share your skills, and contribute to various departments that align with your passions. Whether you're interested in music, outreach, children's programs, or other areas, there's a role for you to play in furthering our mission and vision.
+            </p>
+            <br>
+            <h2>Explore Workforce</h2>
+            <div class="row block-large-1-2 block-1000-full block-list">
+                {% for department in departments %}
+                <div class="column block-list__item">
+                    <h4 class="block-list__title-with-num">{{department.name}}</h4>
+                    <p>
+                        {{department.description}}
+                    </p>
+                </div>
+                {% endfor %}
+            </div>
+            <h2>Ready to Make a Difference?</h2>
+            <p>
+                Thank you for considering working with us. Your commitment to serving God is a testament to your faith and values. Please take a moment to complete the form below and let us know how you'd like to contribute to our mission.
+            </p>
+            {% if form.errors %}
+            <div class="alert-box alert-box--error hideit" id="error">
+                <p><strong>Error!</strong> Please fix the following errors:</p>
+                <ul>
+                    {% for error in form.errors.values %}
+                    {{ error }}
+                    {% endfor %}
+                </ul>
+                <i class="fa fa-times alert-box__close" aria-hidden="true"></i>
+            </div>
+            {% endif %}
+            <form name="volunteerForm" id="volunteerForm" class="volunteerForm" method="post" action="" autocomplete="off">
+                {% csrf_token %}
+                <fieldset>
+                    <div class="form-field">
+                        {{ form.name }}
+                    </div>
+                    <div class="form-field">
+                        {{ form.phone_number }}
+                    </div>
+                    <div class="form-field">
+                        {{ form.email }}
+                    </div>
+                    <br/>
+                    <div class="form-field">
+                        <label for="{{ form.department.id_for_label }}" class="custom-label-class">Select the Department You're Interested In</label>
+                        <div class="ss-custom-select">
+                            {{ form.department }}
+                        </div>
+                    </div>
+                    <div class="form-field">
+                        <label for="{{ form.question.id_for_label }}" class="custom-label-class">Is This Your First Time Working?</label>
+                        <div class="ss-custom-select">
+                            {{ form.question }}
+                        </div>
+                    </div>
+                    <div class="comments form-field">
+                        {{ form.comment }}
+                    </div>
+                    <br>
+                    <input name="submit" id="submit" class="btn btn--primary btn--large h-full-width" value="Start Contributing" type="submit">
+                </fieldset>
+            </form>
+        </div>
+    </div>
+</section>
+<script>
+var gt = '{{goto}}';
+
+if (gt) {
+    var target = document.querySelector(gt);
+    if (target) {
+        target.scrollIntoView();
+    }
+}
+</script>
+{% endblock %}

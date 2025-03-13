@@ -1,0 +1,12 @@
+                                    Connect Group
+Name: {{ name }}
+Phone Number: {{ phone_number }}
+Demographic: {{ demographic }}
+{% if comment %}
+Comment & Question: {{ comment }}
+{% endif %}
+
+{{ name }} wants to connect to the {{ demographic }} group.
+
+Thank you,
+HHA Team
