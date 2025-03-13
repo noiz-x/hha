@@ -1,0 +1,7 @@
+Django>=3.2,<4.0
+djangorestframework>=3.12.4
+django-environ==0.12.0
+Pillow>=8.2.0
+qrcode>=6.1
+django-recurrence==1.11.1
+dotenv==0.9.9
