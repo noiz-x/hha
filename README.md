@@ -1,9 +1,9 @@
-# {{PROJECT_NAME}}
+# hha
 
-Welcome to the {{PROJECT_NAME}} repository!
+Welcome to the hha repository!
 
 ## Description
 
-{{PROJECT_DESCRIPTION}}
+
 
 For issues, please see [our issue tracker](issues).
