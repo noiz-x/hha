@@ -1,0 +1,13 @@
+                                    Event Registration
+Name: {{ name }}
+Phone Number: {{ phone_number }}
+Event: {{ event }}
+Proof: {{protocol}}://{{ domain }}/{{ proof.url }}
+{% if comment %}
+Comment & Question: {{ comment }}
+{% endif %}
+
+{{ name }} registered for the {{ event }} programme. Please click the following link to confirm the registration: {{protocol}}://{{ domain }}/events/confirm/{{ unique_uuid }}
+
+Thank you,
+HHA Team

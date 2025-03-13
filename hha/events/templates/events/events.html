@@ -1,0 +1,104 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}
+<title>American Baptist Church - Upcoming Events</title>
+{% endblock %}
+{% block content %}
+<section class="page-header page-header--events">
+    <div class="gradient-overlay"></div>
+    <div class="row page-header__content">
+        <div class="column">
+            <h1>Upcoming Events</h1>
+        </div>
+    </div>
+</section>
+<section class="page-content">
+    <div class="row wide block-large-1-2 block-900-full events-list">
+        {% for occ in events %}
+            <div class="column events-list__item">
+                <h3 class="display-1 events-list__item-title">
+                    <a href="{% url 'events:single' slug=occ.event.slug date=occ.date|date:'Y-m-d' %}" 
+                       title="{{ occ.event.name }}{% if occ.event.is_special %} - Special{% endif %}">
+                        {{ occ.event.name }}{% if occ.event.is_special %}&nbsp;
+                            <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 0 512 512">
+                                <path fill="#f9be19" d="M208 512a24.84 24.84 0 0 1-23.34-16l-39.84-103.6a16.06 16.06 0 0 0-9.19-9.19L32 343.34a25 25 0 0 1 0-46.68l103.6-39.84a16.06 16.06 0 0 0 9.19-9.19L184.66 144a25 25 0 0 1 46.68 0l39.84 103.6a16.06 16.06 0 0 0 9.19 9.19l103 39.63a25.49 25.49 0 0 1 16.63 24.1a24.82 24.82 0 0 1-16 22.82l-103.6 39.84a16.06 16.06 0 0 0-9.19 9.19L231.34 496A24.84 24.84 0 0 1 208 512Zm66.85-254.84ZM88 176a14.67 14.67 0 0 1-13.69-9.4l-16.86-43.84a7.28 7.28 0 0 0-4.21-4.21L9.4 101.69a14.67 14.67 0 0 1 0-27.38l43.84-16.86a7.31 7.31 0 0 0 4.21-4.21L74.16 9.79A15 15 0 0 1 86.23.11a14.67 14.67 0 0 1 15.46 9.29l16.86 43.84a7.31 7.31 0 0 0 4.21 4.21l43.84 16.86a14.67 14.67 0 0 1 0 27.38l-43.84 16.86a7.28 7.28 0 0 0-4.21 4.21l-16.86 43.84A14.67 14.67 0 0 1 88 176Zm312 80a16 16 0 0 1-14.93-10.26l-22.84-59.37a8 8 0 0 0-4.6-4.6l-59.37-22.84a16 16 0 0 1 0-29.86l59.37-22.84a8 8 0 0 0 4.6-4.6l22.67-58.95a16.45 16.45 0 0 1 13.17-10.57a16 16 0 0 1 16.86 10.15l22.84 59.37a8 8 0 0 0 4.6 4.6l59.37 22.84a16 16 0 0 1 0 29.86l-59.37 22.84a8 8 0 0 0-4.6 4.6l-22.84 59.37A16 16 0 0 1 400 256Z"/>
+                            </svg>
+                        {% endif %}
+                    </a>
+                </h3>
+                <p>
+                    {% if occ.event.description %}
+                        {{ occ.event.description|truncatechars:250 }}
+                    {% else %}
+                        No description available.
+                    {% endif %}
+                </p>
+                <ul class="events-list__meta">
+                    <li class="events-list__meta-date">
+                        {{ occ.date|date:"l, F j, Y" }}
+                    </li>
+                    <li class="events-list__meta-time">
+                        {{ occ.event.start_time|time:"g:iA" }} -
+                        {{ occ.event.end_time|time:"g:iA" }}
+                    </li>
+                    <li class="events-list__meta-location">
+                        {{ occ.event.location }}
+                    </li>
+                    {% if occ.event.is_special %}
+                        <li class="events-list__meta-quote">Anticipate</li>
+                    {% endif %}
+                </ul>
+            </div>
+        {% empty %}
+            <p>No upcoming events available at the moment. Please check back later.</p>
+        {% endfor %}
+    </div>
+    <div class="row">
+        <div class="column large-full">
+            <nav class="pgn">
+                <ul class="pgn">
+                    {% if events.has_previous %}
+                        <li>
+                            <a class="pgn__prev" href="?page={{ events.previous_page_number }}">Prev</a>
+                        </li>
+                    {% endif %}
+
+                    {% with current=events.number total=events.paginator.num_pages %}
+                        {% for i in events.paginator.page_range %}
+                            {% if i == 1 or i == total %}
+                                {% if i == current %}
+                                    <li>
+                                        <span class="pgn__num current">{{ i }}</span>
+                                    </li>
+                                {% else %}
+                                    <li>
+                                        <a class="pgn__num" href="?page={{ i }}">{{ i }}</a>
+                                    </li>
+                                {% endif %}
+                            {% elif i >= current|add:"-2" and i <= current|add:"2" %}
+                                {% if i == current %}
+                                    <li>
+                                        <span class="pgn__num current">{{ i }}</span>
+                                    </li>
+                                {% else %}
+                                    <li>
+                                        <a class="pgn__num" href="?page={{ i }}">{{ i }}</a>
+                                    </li>
+                                {% endif %}
+                            {% elif i == current|add:"-3" or i == current|add:"3" %}
+                                <li><span class="pgn__num">…</span></li>
+                            {% endif %}
+                        {% endfor %}
+                    {% endwith %}
+
+                    {% if events.has_next %}
+                        <li>
+                            <a class="pgn__next" href="?page={{ events.next_page_number }}">Next</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,13 @@
+                                    Worker Confirmation
+Name: {{ name }}
+Phone Number: {{ phone_number }}
+Department: {{ department }}
+First time serving: {{ question }}
+{% if comment %}
+Comment & Question: {{ comment }}
+{% endif %}
+
+{{ name }} registered as a new worker. Please click the following link to confirm the registration: {{protocol}}://{{ domain }}/department/confirm/{{ unique_uuid }}
+
+Thank you,
+HHA Team

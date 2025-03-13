@@ -1,0 +1,151 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}
+<title>American Baptist Church - About</title>
+{% endblock %}
+{% block content %}
+<section class="page-header page-header--about">
+    <div class="gradient-overlay"></div>
+    <div class="row page-header__content">
+        <div class="column">
+            <h1>Welcome to American Baptist Church</h1>
+        </div>
+    </div>
+</section>
+<section class="page-content">
+    <div class="row">
+        <div class="column">
+            <p class="lead drop-cap">
+                We are a vibrant and diverse community of believers who come together to worship,
+                learn, and grow in faith. Our mission is to spread the love of Christ and make a positive
+                impact in our community and beyond. At Hope Hall Assembly, you'll find a welcoming atmosphere
+                and a place where you can experience God's presence in a meaningful way.
+            </p>
+            <div class="row">
+                <div class="column large-half medium-full">
+                    <h2>Our Vision.</h2>
+                    <ul>
+                        <li>To make heaven.</li>
+                        <li>To take as many people with us.</li>
+                        <li>To have a member of RCCG in every family of all nations.</li>
+                    </ul>
+                    <p>
+                        Our vision is to make heaven and ensure the inclusion of as many individuals as possible in this pursuit.
+                        This involves having a representative from the Redeemed Christian Church of God (RCCG) within every family
+                        across all nations, aiming for widespread spiritual presence and impact.
+                    </p>
+                </div>
+                <div class="column large-half medium-full">
+                    <h2>Our Mission.</h2>
+                    <ul>
+                        <li>To accomplish Vision 1, holiness will be our lifestyle.</li>
+                        <li>To accomplish Vision 2 and Vision 3, we will plant churches within five minutes walking distance in every city and town of developing countries and within five minutes driving distance in every city and town of developed countries.</li>
+                        <li>We will pursue these objectives until every Nation in the world is reached for the Lord Jesus Christ.</li>
+                    </ul>
+                    <p>
+                        Our mission is to make holiness our lifestyle to achieve Vision 1, while for Vision 2 and Vision 3, we plan
+                        to establish churches within a five-minute walking distance in developing countries and within a five-minute
+                        driving distance in developed countries' cities and towns. Our unwavering pursuit is to continue these efforts
+                        until the message of Lord Jesus Christ reaches every nation globally.
+                    </p>
+                </div>
+            </div>
+            {% if passage %}
+            <blockquote cite="https://www.biblegateway.com/passage/?search={{ reference }}&version={{ version }}">
+                <p>
+                    {{ passage }}
+                </p>
+                <cite>
+                    <a href="https://www.biblegateway.com/passage/?search={{ reference }}&version={{ version }}">{{ reference|upper }} {{ version|upper }}</a>
+                </cite>
+            </blockquote>
+            {% endif %}
+            <br>
+            <h2>Our Core Values</h2>
+            <div class="row block-large-1-2 block-1000-full block-list">
+                <div class="column block-list__item">
+                    <h6>Faith: Trusting in God's Plan</h6>
+                    <p>
+                        We believe that faith is the foundation of our journey. Through prayer, Scripture,
+                        and a deep reliance on God, we find strength, guidance, and purpose in our lives.
+                    </p>
+                </div>
+                <div class="column block-list__item">
+                    <h6>Community: Building Relationships</h6>
+                    <p>
+                        At HHA, we value relationships and genuine connections. We support and
+                        uplift one another as we grow together in faith, love, and fellowship.
+                    </p>
+                </div>
+                <div class="column block-list__item">
+                    <h6>Service: Making a Difference</h6>
+                    <p>
+                        Serving others is at the heart of our calling. We strive to make a positive impact
+                        in our community and world through acts of compassion, generosity, and outreach.
+                    </p>
+                </div>
+                <div class="column block-list__item">
+                    <h6>Excellence: Honoring God in All We Do</h6>
+                    <p>
+                        We are committed to honoring God by offering our best in everything we do. Whether
+                        in worship, ministry, or daily life, we aim to bring glory to His name.
+                    </p>
+                </div>
+            </div>
+            <br>
+            <h2>Our Statement of Faith</h2>
+            <div class="row block-large-1-2 block-1000-full block-list">
+                <div class="column block-list__item">
+                    <h6>God: Father, Son, and Holy Spirit</h6>
+                    <p>
+                        We believe in the triune God—God the Father, God the Son (Jesus Christ), and God the
+                        Holy Spirit. They are distinct yet united, co-eternal, and co-equal in essence.
+                    </p>
+                </div>
+                <div class="column block-list__item">
+                    <h6>The Bible: Inspired and Authoritative</h6>
+                    <p>
+                        We affirm the Bible as the inspired and authoritative Word of God. It is the source of
+                        truth, guidance, and wisdom for our faith and life.
+                    </p>
+                </div>
+                <div class="column block-list__item">
+                    <h6>Salvation: Through Faith in Christ</h6>
+                    <p>
+                        We believe that salvation is a gift from God through faith in Jesus Christ. His death
+                        and resurrection provide forgiveness of sins and eternal life for all who believe.
+                    </p>
+                </div>
+                <div class="column block-list__item">
+                    <h6>Church: The Body of Christ</h6>
+                    <p>
+                        The Church is the universal Body of Christ, made up of believers from all walks of life.
+                        We are called to worship, fellowship, and share the message of God's love with the world.
+                    </p>
+                </div>
+            </div>
+            <br>
+            {% if leadership %}
+            <h2>Meet Our Leadership Team</h2>
+            <div class="row block-large-1-2 block-tab-full church-staff">
+                {% for leader in leadership %}
+                <div class="column church-staff__item">
+                    <div class="church-staff__header">
+                        <div class="church-staff__picture">
+                            <img src="{{ leader.image.url }}" alt="">
+                        </div>
+                        <h4 class="church-staff__name">
+                            {{ leader.name }}
+                            <span class="church-staff__position">
+                                {{ leader.roles }}
+                            </span>
+                        </h4>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</section>
+{% endblock %}
