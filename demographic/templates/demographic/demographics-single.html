@@ -73,8 +73,12 @@
                 <p><strong>Error!</strong> Please fix the following errors:</p>
                 <ul>
                     {% for error in form.errors.values %}
-                    {% comment %} TODO: Check if two error are the smae and only accept or prioritize one {% endcomment %}
-                    {{ error }}
+                        {% for message in error|dictsort:"0"|unordered_list %}
+                            {% if message not in seen_errors %}
+                                <li>{{ message }}</li>
+                                {% if seen_errors.append(message) %}{% endif %}
+                            {% endif %}
+                        {% endfor %}
                     {% endfor %}
                 </ul>
                 <i class="fa fa-times alert-box__close" aria-hidden="true"></i>
