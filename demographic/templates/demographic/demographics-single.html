@@ -38,7 +38,11 @@
     </div>
     <div class="row">
         {% if events %}
-        <h6>Upcoming Events</h6>
+        <div class="row events-header">
+            <div class="column">
+                <h2 class="subhead">Explore Upcoming Events</h2>
+            </div>
+        </div>
         <div class="row wide block-large-1-2 block-900-full events-list">
             {% for event in events %}
             <div class="column events-list__item">
@@ -50,7 +54,7 @@
                 </p>
                 <ul class="events-list__meta">
                     <li class="events-list__meta-date">{{ event.date|date:"l, F j, Y" }}</li>
-                    <li class="events-list__meta-time">{{ event.start_time|time:"g:iA" }}{% if event.end_time %} - {{ event.end_time|time:"g:iA" }} {% endif %}</li>
+                    <li class="events-list__meta-time">{{ event.event.start_time|time:"g:iA" }}{% if event.event.end_time %} - {{ event.event.end_time|time:"g:iA" }} {% endif %}</li>
                     <li class="events-list__meta-location">{{ event.event.location }}</li>
                 </ul>
             </div>
@@ -69,6 +73,7 @@
                 <p><strong>Error!</strong> Please fix the following errors:</p>
                 <ul>
                     {% for error in form.errors.values %}
+                    {% comment %} TODO: Check if two error are the smae and only accept or prioritize one {% endcomment %}
                     {{ error }}
                     {% endfor %}
                 </ul>
@@ -104,4 +109,16 @@
         </div>
     </div>
 </section>
+{% if goto %}
+    <script>
+        var gt = '{{goto}}';
+
+        if (gt) {
+            var target = document.querySelector(gt);
+            if (target) {
+                target.scrollIntoView();
+            }
+        }
+    </script>
+{% endif %}
 {% endblock %}

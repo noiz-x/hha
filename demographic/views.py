@@ -1,6 +1,8 @@
+from datetime import timedelta, datetime
 from django.core.mail import send_mail
 from django.shortcuts import render
 from django.template.loader import render_to_string
+from django.utils import timezone
 from django.utils.html import strip_tags
 
 from demographic.forms import NewDemographicForm
@@ -18,9 +20,26 @@ def home(request):
 
 def single(request, slug):
     context = {}
+    now = timezone.now()
+    two_months_later = now + timedelta(days=60)
+
     demographic_leader = DemographicLeader.objects.get(demographic__slug=slug)
 
-    events = EventDate.objects.filter(event__demographic__slug=slug).order_by('event__start_date', 'start_time')
+    events = Event.objects.filter(demographic__slug=slug).order_by('start_time')
+    
+    # Build a list of upcoming occurrences
+    upcoming_occurrences = []
+    for event in events:
+        occ_dates = event.get_occurrences(range_start=now, range_end=two_months_later)
+        for occ in occ_dates:
+            # Compute the end time based on the event duration
+            upcoming_occurrences.append({
+                'event': event,               # Parent event details
+                'date': occ.date(),           # Occurrence date
+            })
+    
+    # Sort the occurrences by date and time (earliest first)
+    upcoming_occurrences.sort(key=lambda x: (x['date'], x['event'].start_time))
 
     if request.method == 'POST':
         form = NewDemographicForm(request.POST, slug=slug)
@@ -28,12 +47,14 @@ def single(request, slug):
             cleaned_data = form.cleaned_data
             name = cleaned_data['name']
             phone_number = cleaned_data['phone_number']
+            email = cleaned_data['email']
             demographic = cleaned_data['demographic']
             comment = cleaned_data['comment']
 
             email_context = {
                 'name': name,
                 'phone_number': phone_number,
+                'email': email,
                 'demographic': demographic,
                 'comment': comment,
             }
@@ -61,6 +82,6 @@ def single(request, slug):
     context.update({
         'demographic_leader': demographic_leader,
         'form': form,
-        'events': events,
+        'events': upcoming_occurrences,
     })
     return render(request, 'demographic/demographics-single.html', context)

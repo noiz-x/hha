@@ -10,6 +10,7 @@ from hha.votd import get_votd
 from ministries.models import DepartmentLeader
 from requests.exceptions import RequestException
 from core.models import InspirationalQuote
+from core.forms import NewContactForm
 
 def is_internet_connected():
     try:
@@ -95,7 +96,27 @@ def about(request):
     return render(request, 'core/about.html', context)
 
 def contact(request):
-    return render(request, 'core/contact.html')
+    context = {}
+    if request.method == 'POST':
+        form = NewContactForm(request.POST)
+        if form.is_valid():
+            cleaned_data = form.cleaned_data
+            name = cleaned_data['name']
+            phone_number = cleaned_data['phone_number']
+            email = cleaned_data['email']
+            message = cleaned_data['message']
+
+            pass
+
+        else:
+            context.update({'form': form, 'goto': '#error'})
+
+    else:
+        form = NewContactForm()
+        
+    context.update({'form': form})
+
+    return render(request, 'core/contact.html', context)
 
 def giving(request):
     return render(request, 'core/giving.html')

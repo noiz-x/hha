@@ -2510,6 +2510,7 @@ html.no-csstransitions .hero-content {
 }
 
 .series-img {
+  background-image: url(../images/series-2000.jpg);
   display: block;
   background-repeat: no-repeat;
   background-position: center center;
@@ -3095,23 +3096,23 @@ html.no-csstransitions .hero-content {
   background-image: url(../images/header-bgs/giving-header-bg-2000.webp);
 }
 
-.page-header--children-and-teens {
+.page-header--childrens-club {
   background-image: url(../images/header-bgs/children-and-teens-header-bg-2000.jpg);
 }
 
-.page-header--excellent-men {
+.page-header--dynamic-leaders {
   background-image: url(../images/header-bgs/excellent-men-header-bg-2000.jpg);
 }
 
-.page-header--elders {
+.page-header--senior-scholars {
   background-image: url(../images/header-bgs/elders-header-bg-2000.jpg);
 }
 
-.page-header--good-women {
+.page-header--empowered-women {
   background-image: url(../images/header-bgs/good-women-header-bg-2000.jpg);
 }
 
-.page-header--youths-and-young-adults {
+.page-header--youth-innovators {
   background-image: url(../images/header-bgs/youths-and-young-adults-header-bg-2000.jpg);
 }
 

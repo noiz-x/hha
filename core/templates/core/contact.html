@@ -48,19 +48,32 @@
                 </div>
             </div>
             <h2>Get In Touch.</h2>
-            <form name="contactForm" id="contactForm" method="post" action="#" autocomplete="off">
+            {% if form.errors %}
+            <div class="alert-box alert-box--error hideit" id="error">
+                <p><strong>Error!</strong> Please fix the following errors:</p>
+                <ul>
+                    {% for error in form.errors.values %}
+                    {% comment %} TODO: Check if two error are the smae and only accept or prioritize one {% endcomment %}
+                    {{ error }}
+                    {% endfor %}
+                </ul>
+                <i class="fa fa-times alert-box__close" aria-hidden="true"></i>
+            </div>
+            {% endif %}
+            <form name="contactForm" id="contactForm" method="post" action="" autocomplete="off">
+                {% csrf_token %}
                 <fieldset>
                     <div class="form-field">
-                        <input name="cName" id="cName" class="h-full-width h-remove-bottom" placeholder="Your Name" value="" type="text">
+                        {{form.name}}
                     </div>
                     <div class="form-field">
-                        <input name="cEmail" id="cEmail" class="h-full-width h-remove-bottom" placeholder="Your Email" value="" type="text">
+                        {{form.email}}
                     </div>
                     <div class="form-field">
-                        <input name="cWebsite" id="cWebsite" class="h-full-width h-remove-bottom" placeholder="Website" value="" type="text">
+                        {{form.phone_number}}
                     </div>
                     <div class="message form-field">
-                        <textarea name="cMessage" id="cMessage" class="h-full-width h-remove-bottom" placeholder="Your Message"></textarea>
+                        {{form.message}}
                     </div>
                     <br>
                     <input name="submit" id="submit" class="btn btn--primary btn-wide btn--large h-full-width" value="Send Message" type="submit">
@@ -69,5 +82,16 @@
         </div>
     </div>
 </section>
+{% if goto %}
+    <script>
+        var gt = '{{goto}}';
 
+        if (gt) {
+            var target = document.querySelector(gt);
+            if (target) {
+                target.scrollIntoView();
+            }
+        }
+    </script>
+{% endif %}
 {% endblock %}

@@ -41,6 +41,7 @@
             <div class="alert-box alert-box--error hideit" id="error">
                 <p><strong>Error!</strong> Please fix the following errors:</p>
                 <ul>
+                    {% comment %} TODO: Check if two error are the smae and only accept or prioritize one {% endcomment %}
                     {% for error in form.errors.values %}
                     {{ error }}
                     {% endfor %}
@@ -83,14 +84,16 @@
         </div>
     </div>
 </section>
-<script>
-var gt = '{{goto}}';
+{% if goto %}
+    <script>
+        var gt = '{{goto}}';
 
-if (gt) {
-    var target = document.querySelector(gt);
-    if (target) {
-        target.scrollIntoView();
-    }
-}
-</script>
+        if (gt) {
+            var target = document.querySelector(gt);
+            if (target) {
+                target.scrollIntoView();
+            }
+        }
+    </script>
+{% endif %}
 {% endblock %}
