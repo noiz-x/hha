@@ -15,6 +15,7 @@ from django.utils import timezone
 from django.utils.html import strip_tags
 from events.forms import NewRegistrationForm, NewRegistrationFormwithProof
 from events.models import Event, Registration, QRCodeToken
+from hha.settings import EMAIL_HOST_USER
 
 
 def get_occurrence_for_date(event, target_date):
@@ -179,8 +180,8 @@ def single(request, slug, date):
                 send_mail(
                     email_subject,
                     strip_tags(email_body_text),
-                    'hopehallassembly@gmail.com',
-                    ['hopehallassembly@gmail.com'],
+                    EMAIL_HOST_USER,
+                    [EMAIL_HOST_USER],
                     html_message=email_body_html,
                     fail_silently=False,
                 )
@@ -231,8 +232,8 @@ def confirm(request, unique_uuid):
             msg = EmailMessage(
                 subject=email_subject,
                 body=strip_tags(email_body_html),
-                from_email='hopehallassembly@gmail.com',
-                to=['hopehallassembly@gmail.com'],
+                from_email=EMAIL_HOST_USER,
+                to=[EMAIL_HOST_USER],
             )
             msg.attach_alternative(email_body_html, "text/html")
             msg.send()

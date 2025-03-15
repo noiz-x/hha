@@ -13,7 +13,7 @@ class NewWorkerForm(forms.ModelForm):
     phone_number = forms.CharField(
         max_length=20,
         widget=forms.TextInput(attrs={'class': 'h-full-width h-remove-bottom', 'placeholder': 'Phone Number'}),
-        validators=[RegexValidator(r'^\+234\d{10}$', message='Invalid phone number format. Please use +234XXXXXXXXXX.')],
+        validators=[RegexValidator(r'^\+234\d{10}$', message='Invalid phone number format. Please use +234XXXXXXXXXX.'), name_va],
     )
     email = forms.EmailField(
         max_length=100,
@@ -41,3 +41,11 @@ class NewWorkerForm(forms.ModelForm):
     class Meta:
         model = Worker
         fields = ['name', 'phone_number', 'email', 'department', 'question', 'comment']
+
+# Name validator for the spliting of names and all
+def name_validator(self):
+    try:
+        first_name, last_name = self.name.split()
+        swapped_name = f"{last_name} {first_name}"
+    except ValueError:
+        self.add_error('name', 'Please provide a full name.')

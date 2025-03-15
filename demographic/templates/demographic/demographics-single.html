@@ -68,17 +68,19 @@
             <p>
                 Kindly fill-up the form below to help us better understand your profile and help you connect to a connect group that suits you.
             </p>
+            {% if form.is_valid %}
+            <div class="alert-box alert-box--success hideit" id="alert">
+                <p><strong>Success!</strong> Request Sent Successfully!</p>
+                <p>Your request to connect has been received and is being processed.<br>Thank you for connecting with us.</p>
+                <i class="fa fa-times alert-box__close" aria-hidden="true"></i>
+            </div>
+            {% endif %}
             {% if form.errors %}
-            <div class="alert-box alert-box--error hideit" id="error">
+            <div class="alert-box alert-box--error hideit" id="alert">
                 <p><strong>Error!</strong> Please fix the following errors:</p>
                 <ul>
                     {% for error in form.errors.values %}
-                        {% for message in error|dictsort:"0"|unordered_list %}
-                            {% if message not in seen_errors %}
-                                <li>{{ message }}</li>
-                                {% if seen_errors.append(message) %}{% endif %}
-                            {% endif %}
-                        {% endfor %}
+                    {{ error }}
                     {% endfor %}
                 </ul>
                 <i class="fa fa-times alert-box__close" aria-hidden="true"></i>

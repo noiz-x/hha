@@ -9,4 +9,4 @@ Comment & Question: {{ comment }}
 {{ name }} wants to connect to the {{ demographic }} group.
 
 Thank you,
-HHA Team
+ABC Team

@@ -4,7 +4,7 @@ from django.shortcuts import render
 from django.template.loader import render_to_string
 from django.utils import timezone
 from django.utils.html import strip_tags
-
+from hha.settings import EMAIL_HOST_USER
 from demographic.forms import NewDemographicForm
 from demographic.models import Demographic, DemographicLeader
 from events.models import Event
@@ -63,18 +63,17 @@ def single(request, slug):
             email_body_text = render_to_string('demographic/email/demographic_notification.txt', email_context)
             email_body_html = render_to_string('demographic/email/demographic_notification.html', email_context)
 
-            send_mail(
-                email_subject,
-                strip_tags(email_body_text),
-                'hopehallassembly@gmail.com',
-                ['hopehallassembly@gmail.com'],
-                html_message=email_body_html,
-                fail_silently=False,
-            )
+            # send_mail(
+            #     email_subject,
+            #     strip_tags(email_body_text),
+            #     EMAIL_HOST_USER,
+            #     [EMAIL_HOST_USER],
+            #     html_message=email_body_html,
+            #     fail_silently=False,
+            # )
+            print(strip_tags(email_body_text))
 
-            return render(request, 'demographic/success.html')
-        else:
-            context.update({'form': form, 'goto': '#error'})
+        context.update({'form': form, 'goto': '#alert'})
 
     else:
         form = NewDemographicForm(slug=slug)

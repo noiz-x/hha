@@ -8,9 +8,11 @@ from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from ministries.forms import NewWorkerForm
 from ministries.models import Department, DepartmentWorker
+from hha.settings import EMAIL_HOST_USER
 
 
 def home(request):
+    context = {}
     departments = Department.objects.filter()
 
     if request.method == 'POST':
@@ -23,7 +25,7 @@ def home(request):
                 swapped_name = f"{last_name} {first_name}"
             except ValueError:
                 form.add_error('name', 'Please provide a full name.')
-                return render(request, 'ministries/volunteer.html', {'departments': departments, 'form': form, 'goto': '#error'})
+                return render(request, 'ministries/volunteer.html', {'departments': departments, 'form': form, 'goto': '#alert'})
 
             phone_number = cleaned_data['phone_number']
             email = cleaned_data['email']
@@ -57,33 +59,36 @@ def home(request):
 
             if existing_worker:
                 form.add_error('name', 'Worker already exists.')
-                return render(request, 'ministries/volunteer.html', {'departments': departments, 'form': form, 'goto': '#error'})
+                return render(request, 'ministries/volunteer.html', {'departments': departments, 'form': form, 'goto': '#alert'})
 
-            send_mail(
-                email_subject,
-                strip_tags(email_body_text),
-                'hopehallassembly@gmail.com',
-                ['hopehallassembly@gmail.com'],
-                html_message=email_body_html,
-                fail_silently=False,
-            )
+            # send_mail(
+            #     email_subject,
+            #     strip_tags(email_body_text),
+            #     EMAIL_HOST_USER,
+            #     [EMAIL_HOST_USER],
+            #     html_message=email_body_html,
+            #     fail_silently=False,
+            # )
+            print(strip_tags(email_body_text))
 
-            new_worker = Worker.objects.create(
-                name=name,
-                phone_number=phone_number,
-                email=email,
-                department=department,
-                unique_uuid=unique_uuid,
-            )
-            new_worker.save()
+            # new_worker = Worker.objects.create(
+            #     name=name,
+            #     phone_number=phone_number,
+            #     email=email,
+            #     department=department,
+            #     unique_uuid=unique_uuid,
+            # )
+            # new_worker.save()
 
-            return render(request, 'ministries/success.html')
-        else:
-            return render(request, 'ministries/volunteer.html', {'departments': departments, 'form': form, 'goto': '#error'})
+        context.update({'departments': departments, 'form': form, 'goto': '#alert'})
     else:
         form = NewWorkerForm()
 
-    return render(request, 'ministries/volunteer.html', {'departments': departments, 'form': form})
+    context.update({
+        'departments': departments,
+        'form': form
+    })
+    return render(request, 'ministries/volunteer.html', context)
 
 
 def confirm(request, unique_uuid):
