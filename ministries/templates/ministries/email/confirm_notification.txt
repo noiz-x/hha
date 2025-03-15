@@ -7,7 +7,7 @@ First time serving: {{ question }}
 Comment & Question: {{ comment }}
 {% endif %}
 
-{{ name }} registered as a new worker. Please click the following link to confirm the registration: {{protocol}}://{{ domain }}/department/confirm/{{ unique_uuid }}
+{{ name }} registered as a new worker. Please click the following link to confirm the registration: {{protocol}}://{{ domain }}/departments/confirm/{{ unique_uuid }}
 
 Thank you,
 HHA Team
