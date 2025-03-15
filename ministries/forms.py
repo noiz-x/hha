@@ -3,21 +3,42 @@ from django.core.validators import RegexValidator, EmailValidator
 from core.models import Worker
 from ministries.models import Department
 
-class NewWorkerForm(forms.ModelForm):
+def full_name_validator(value):
+    """Ensure that the name field contains at least two words (first and last name)."""
+    if len(value.split()) < 2:
+        raise forms.ValidationError('Please provide a full name (first and last).')
 
+class NewWorkerForm(forms.ModelForm):
     name = forms.CharField(
         max_length=20,
-        widget=forms.TextInput(attrs={'class': 'h-full-width h-remove-bottom', 'placeholder': 'Your Name'}),
-        validators=[RegexValidator(r'^[a-zA-Z\s]*$', message='Name should only contain letters and spaces.')],
+        widget=forms.TextInput(attrs={
+            'class': 'h-full-width h-remove-bottom',
+            'placeholder': 'Your Name'
+        }),
+        validators=[
+            RegexValidator(r'^[a-zA-Z\s]*$', message='Name should only contain letters and spaces.'),
+            full_name_validator,
+        ],
     )
     phone_number = forms.CharField(
         max_length=20,
-        widget=forms.TextInput(attrs={'class': 'h-full-width h-remove-bottom', 'placeholder': 'Phone Number'}),
-        validators=[RegexValidator(r'^\+234\d{10}$', message='Invalid phone number format. Please use +234XXXXXXXXXX.'), name_va],
+        widget=forms.TextInput(attrs={
+            'class': 'h-full-width h-remove-bottom',
+            'placeholder': 'Phone Number'
+        }),
+        validators=[
+            RegexValidator(
+                r'^\+234\d{10}$', 
+                message='Invalid phone number format. Please use +234XXXXXXXXXX.'
+            ),
+        ],
     )
     email = forms.EmailField(
         max_length=100,
-        widget=forms.EmailInput(attrs={'class': 'h-full-width h-remove-bottom', 'placeholder': 'Email'}),
+        widget=forms.EmailInput(attrs={
+            'class': 'h-full-width h-remove-bottom',
+            'placeholder': 'Email'
+        }),
         validators=[EmailValidator(message='Enter a valid email address.')],
     )
     department = forms.ModelChoiceField(
@@ -34,18 +55,13 @@ class NewWorkerForm(forms.ModelForm):
         widget=forms.Select(attrs={'class': 'h-full-width h-remove-bottom'}),
     )
     comment = forms.CharField(
-        widget=forms.Textarea(attrs={'class': 'h-full-width h-remove-bottom', 'placeholder': 'Comments & Questions'}),
+        widget=forms.Textarea(attrs={
+            'class': 'h-full-width h-remove-bottom',
+            'placeholder': 'Comments & Questions'
+        }),
         required=False,
     )
 
     class Meta:
         model = Worker
         fields = ['name', 'phone_number', 'email', 'department', 'question', 'comment']
-
-# Name validator for the spliting of names and all
-def name_validator(self):
-    try:
-        first_name, last_name = self.name.split()
-        swapped_name = f"{last_name} {first_name}"
-    except ValueError:
-        self.add_error('name', 'Please provide a full name.')
