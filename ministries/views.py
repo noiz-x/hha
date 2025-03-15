@@ -20,13 +20,6 @@ def home(request):
         if form.is_valid():
             cleaned_data = form.cleaned_data
             name = cleaned_data['name']
-            try:
-                first_name, last_name = name.split()
-                swapped_name = f"{last_name} {first_name}"
-            except ValueError:
-                form.add_error('name', 'Please provide a full name.')
-                return render(request, 'ministries/volunteer.html', {'departments': departments, 'form': form, 'goto': '#alert'})
-
             phone_number = cleaned_data['phone_number']
             email = cleaned_data['email']
             department = cleaned_data['department'].name
