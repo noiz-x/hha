@@ -36,10 +36,10 @@ class NewWorkerForm(forms.ModelForm):
     email = forms.EmailField(
         max_length=100,
         widget=forms.EmailInput(attrs={
-            'class': 'h-full-width h-remove-bottom',
+            'class': 'h-full-width h-remove-bottom', 
             'placeholder': 'Email'
         }),
-        validators=[EmailValidator(message='Enter a valid email address.')],
+        error_messages={'invalid': 'Enter a valid email address.'},
     )
     department = forms.ModelChoiceField(
         queryset=Department.objects.exclude(name__iexact='Pastorates'),
