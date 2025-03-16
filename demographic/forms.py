@@ -17,7 +17,7 @@ class NewDemographicForm(forms.Form):
     email = forms.EmailField(
         max_length=100,
         widget=forms.EmailInput(attrs={'class': 'h-full-width h-remove-bottom', 'placeholder': 'Email'}),
-        validators=[EmailValidator(message='Enter a valid email address.')],
+        error_messages={'invalid': 'Enter a valid email address.'},
     )
     demographic = forms.ModelChoiceField(
         queryset=Demographic.objects.all(),

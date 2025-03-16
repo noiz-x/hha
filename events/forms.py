@@ -21,7 +21,7 @@ class NewRegistrationForm(forms.ModelForm):
     email = forms.EmailField(
         max_length=100,
         widget=forms.EmailInput(attrs={'class': 'h-full-width h-remove-bottom', 'placeholder': 'Email'}),
-        validators=[EmailValidator(message='Enter a valid email address.')],
+        error_messages={'invalid': 'Enter a valid email address.'},
     )
     event = forms.ModelChoiceField(
         queryset=Event.objects.all(),
