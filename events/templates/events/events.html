@@ -28,7 +28,7 @@
                 </h3>
                 <p>
                     {% if occ.event.description %}
-                        {{ occ.event.description|truncatechars:250 }}
+                        {{ occ.event.description|truncatechars:150 }}
                     {% else %}
                         No description available.
                     {% endif %}

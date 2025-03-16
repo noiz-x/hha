@@ -25,7 +25,7 @@
                         </svg>{% endif %}
                     </a>
                 </h3>
-                <p>{{ occ.event.description|truncatechars:250 }}</p>
+                <p>{{ occ.event.description|truncatechars:150 }}</p>
                 <ul class="events-list__meta">
                     <li class="events-list__meta-date">
                         {{ occ.date|date:"l, F j, Y" }}
