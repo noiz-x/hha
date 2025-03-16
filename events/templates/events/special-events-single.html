@@ -146,14 +146,6 @@
                     </div>
                 </li>
                 </ul>
-                <div style="display: flex;gap: 10px;">
-                    {% if gallery and event.date <= date %}
-                    <a class="btn btn--primary h-full-width" href="{% url 'gallery:single' slug=gallery.eventdate.event.slug date=gallery.eventdate.date %}" title="{{ gallery.eventdate.event.name }} - Gallery">Gallery</a>
-                    {% endif %}
-                    {% if sermon %}
-                    <a class="btn btn--primary h-full-width" href="{% url 'sermons:single' slug=sermon.eventdate.event.slug date=sermon.eventdate.date %}" title="{{ sermon.eventdate.event.name }} - Sermon">Sermon</a>
-                    {% endif %}
-                </div>
             </div>
         </div>
     </div>
@@ -195,8 +187,15 @@
             <p>
                 Kindly fill-up the form below.
             </p>
+            {% if form.is_valid %}
+            <div class="alert-box alert-box--success hideit" id="alert">
+                <p><strong>Success!</strong> Request Sent Successfully!</p>
+                <p>Your registration has been received and is being processed.<br>Thank you for registering for the event.</p>
+                <i class="fa fa-times alert-box__close" aria-hidden="true"></i>
+            </div>
+            {% endif %}
             {% if form.errors %}
-            <div class="alert-box alert-box--error hideit" id="error">
+            <div class="alert-box alert-box--error hideit" id="alert">
                 <p><strong>Error!</strong> Please fix the following errors:</p>
                 <ul>
                     {% for error in form.errors.values %}

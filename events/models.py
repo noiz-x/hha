@@ -83,8 +83,6 @@ class Event(models.Model):
                 dtstart=range_start,
                 # inc=True
             )
-        elif range_start <= self.start_date <= range_end:
-            return [self.start_date]
         return []
 
     def get_paragraphs(self):
@@ -103,7 +101,9 @@ class Registration(models.Model):
     name = models.CharField(max_length=100)
     unique_uuid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     phone_number = models.CharField(max_length=20)
+    email = models.EmailField()
     event = models.ForeignKey(Event, on_delete=models.CASCADE)
+    date = models.DateField(default=timezone.now)
     proof = models.ImageField(upload_to='registration/', blank=True)
     comment = models.TextField()
     confirmed = models.BooleanField(default=False)

@@ -1,6 +1,7 @@
                                     Event Registration
 Name: {{ name }}
 Phone Number: {{ phone_number }}
+Email: {{ email }}
 Event: {{ event }}
 Proof: {{protocol}}://{{ domain }}/{{ proof.url }}
 {% if comment %}

@@ -112,14 +112,14 @@ def single(request, slug, date):
     two_months_later = now + timedelta(days=60)
     six_months_ago = now - timedelta(days=3600)
 
-    day_start = datetime.combine(datetime.strptime(date, '%Y-%m-%d').date(), time.min)
-
+    date_start = datetime.combine(datetime.strptime(date, '%Y-%m-%d').date(), time.min)
+    date_start = timezone.make_aware(date_start, timezone.get_current_timezone())
     
     # Retrieve the occurrence for this event on the target date
     occurrences = []
     occ_dates = event.get_occurrences(six_months_ago, two_months_later)
     for occ in occ_dates:
-        if occ.date() == day_start.date():
+        if occ.date() == date_start.date():
             occurrences.append({
                 'event': event,
                 'date': occ.date(),
@@ -127,7 +127,8 @@ def single(request, slug, date):
 
     share_url = request.build_absolute_uri()
     current_datetime = timezone.now()
-    context = {}
+
+    context = {'event': occurrences[0], 'date': current_datetime.date()}
 
     if occurrences[0]['date'] < current_datetime.date() or (occurrences[0]['date'] == current_datetime.date() and occurrences[0]['event'].start_time < (current_datetime + timedelta(hours=1)).time()):
         form_enabled = False
@@ -146,13 +147,10 @@ def single(request, slug, date):
         if request.method == 'POST':
             if form.is_valid():
                 cleaned_data = form.cleaned_data
+                
                 name = cleaned_data['name']
-                try:
-                    first_name, last_name = name.split()
-                    swapped_name = f"{last_name} {first_name}"
-                except ValueError:
-                    form.add_error('name', 'Please provide a full name.')
-                    return render(request, 'events/special-events-single.html', {'form': form, 'goto': '#error'})
+                first_name, last_name = name.split()
+                swapped_name = f"{last_name} {first_name}"
 
                 unique_uuid = uuid.uuid4()
                 form.fields['unique_uuid'] = forms.CharField(widget=forms.HiddenInput, initial=unique_uuid)
@@ -166,39 +164,41 @@ def single(request, slug, date):
 
                 existing = Registration.objects.filter(
                     Q(name__iexact=name) |
-                    Q(name__iexact=swapped_name)
+                    Q(name__iexact=swapped_name),
+                    event=event,
+                    date=occurrences[0]['date']
                 ).first()
 
                 if existing:
-                    form.add_error('name', 'You are already registered.')
-                    return render(request, 'events/special-events-single.html', {'form': form, 'goto': '#error'})
+                    form.add_error('name', f'You are already registered for {occurrences[0]['event']} {occurrences[0]['date']}.')
+                    context.update({'form': form, 'goto': '#alert', 'share_url': share_url, 'form_enabled': form_enabled, 'share_url_enabled': share_url_enabled})
+                    return render(request, 'events/special-events-single.html', context)
 
                 email_subject = 'Event Registration'
                 email_body_text = render_to_string('events/email/events_registration.txt', email_context)
                 email_body_html = render_to_string('events/email/events_registration.html', email_context)
 
-                send_mail(
-                    email_subject,
-                    strip_tags(email_body_text),
-                    EMAIL_HOST_USER,
-                    [EMAIL_HOST_USER],
-                    html_message=email_body_html,
-                    fail_silently=False,
-                )
+                # send_mail(
+                #     email_subject,
+                #     strip_tags(email_body_text),
+                #     EMAIL_HOST_USER,
+                #     [EMAIL_HOST_USER],
+                #     html_message=email_body_html,
+                #     fail_silently=False,
+                # )
 
-                new_registration = Registration(**cleaned_data, unique_uuid=unique_uuid)
+                new_registration = Registration(**cleaned_data, unique_uuid=unique_uuid, date=occurrences[0]['date'])
                 new_registration.save()
 
-                return render(request, 'events/success.html')
+                context.update({'form': form, 'goto': '#alert'})
             else:
-                context.update({'goto': '#error'})
+                context.update({'goto': '#alert'})
 
         context.update({'form': form, 'share_url': share_url, 'form_enabled': form_enabled, 'share_url_enabled': share_url_enabled})
         template_name = 'events/special-events-single.html'
     else:
         template_name = 'events/events-single.html'
 
-    context.update({'event': occurrences[0], 'date': current_datetime.date()})
     return render(request, template_name, context)
 
 def confirm(request, unique_uuid):
@@ -229,20 +229,22 @@ def confirm(request, unique_uuid):
             email_subject = 'Event QR Code Generation'
             email_body_html = render_to_string('events/email/events_registration_qr.html', email_context)
 
-            msg = EmailMessage(
-                subject=email_subject,
-                body=strip_tags(email_body_html),
-                from_email=EMAIL_HOST_USER,
-                to=[EMAIL_HOST_USER],
-            )
-            msg.attach_alternative(email_body_html, "text/html")
-            msg.send()
+            # msg = EmailMessage(
+            #     subject=email_subject,
+            #     body=strip_tags(email_body_html),
+            #     from_email=EMAIL_HOST_USER,
+            #     # to=[registration],
+            # )
+            # msg. (email_body_html, "text/html")
+            # msg.send()
+
+            print(f"{request.scheme}://{request.get_host()}{default_storage.url(image_path)}")
 
             return render(request, 'events/confirmed-qr.html')
 
         return render(request, 'events/confirmed.html')
     except Registration.DoesNotExist:
-        return render(request, 'events/invalid_link.html')
+        return render(request, 'events/invalid-link.html')
 
 @login_required
 @user_passes_test(lambda user: user.is_authenticated and user.is_superuser)
@@ -250,6 +252,6 @@ def user_details(request, token):
     registration = get_object_or_404(Registration, qrcodetoken__token=token)
 
     if not registration.confirmed:
-        return render(request, 'events/not_confirmed.html')
+        return render(request, 'events/not-confirmed.html')
 
     return render(request, 'events/user-details.html', {'user': registration})

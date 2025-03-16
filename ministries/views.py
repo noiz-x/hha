@@ -47,7 +47,8 @@ def home(request):
 
             existing_worker = Worker.objects.filter(
                 Q(name__iexact=name) |
-                Q(name__iexact=swapped_name)
+                Q(name__iexact=swapped_name),
+                confirmed=True
             ).first()
 
             if existing_worker:

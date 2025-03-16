@@ -3,15 +3,23 @@ from django.core.validators import RegexValidator, EmailValidator
 from events.models import Event, Registration
 from PIL import Image
 
+def full_name_validator(value):
+    """Ensure that the name field contains at least two words (first and last name)."""
+    if len(value.split()) < 2:
+        raise forms.ValidationError('Please provide a full name (first and last).')
+
 class NewRegistrationForm(forms.ModelForm):
     class Meta:
         model = Registration
-        fields = ['name', 'phone_number', 'event', 'comment']
+        fields = ['name', 'phone_number', 'email', 'event', 'comment']
 
     name = forms.CharField(
         max_length=20,
         widget=forms.TextInput(attrs={'class': 'h-full-width h-remove-bottom', 'placeholder': 'Your Name'}),
-        validators=[RegexValidator(r'^[a-zA-Z\s]*$', message='Name should only contain letters and spaces.')],
+        validators=[
+            RegexValidator(r'^[a-zA-Z\s]*$', message='Name should only contain letters and spaces.'),
+            full_name_validator,
+        ],
     )
     phone_number = forms.CharField(
         max_length=20,
@@ -49,17 +57,25 @@ class NewRegistrationForm(forms.ModelForm):
 class NewRegistrationFormwithProof(forms.ModelForm):
     class Meta:
         model = Registration
-        fields = ['name', 'phone_number', 'event', 'comment']
+        fields = ['name', 'phone_number', 'email', 'event', 'comment']
 
     name = forms.CharField(
         max_length=20,
         widget=forms.TextInput(attrs={'class': 'h-full-width h-remove-bottom', 'placeholder': 'Your Name'}),
-        validators=[RegexValidator(r'^[a-zA-Z\s]*$', message='Name should only contain letters and spaces.')],
+        validators=[
+            RegexValidator(r'^[a-zA-Z\s]*$', message='Name should only contain letters and spaces.'),
+            full_name_validator,
+        ],
     )
     phone_number = forms.CharField(
         max_length=20,
         widget=forms.TextInput(attrs={'class': 'h-full-width h-remove-bottom', 'placeholder': 'Phone Number'}),
         validators=[RegexValidator(r'^\+234\d{10}$', message='Invalid phone number format. Please use +234XXXXXXXXXX.')],
+    )
+    email = forms.EmailField(
+        max_length=100,
+        widget=forms.EmailInput(attrs={'class': 'h-full-width h-remove-bottom', 'placeholder': 'Email'}),
+        error_messages={'invalid': 'Enter a valid email address.'},
     )
     event = forms.ModelChoiceField(
         queryset=Event.objects.all(),
