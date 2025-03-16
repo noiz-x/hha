@@ -211,12 +211,10 @@ def confirm(request, unique_uuid):
                 email_subject,
                 plain_body,
                 EMAIL_HOST_USER,
-                [EMAIL_HOST_USER],
+                [registration.email],
                 html_message=email_body_html,
                 fail_silently=False,
             )
-
-            print(f"{request.scheme}://{request.get_host()}{default_storage.url(image_path)}")
 
             return render(request, 'events/confirmed-qr.html')
 
